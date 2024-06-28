@@ -50,7 +50,7 @@ class Game
     @blocks = []
     10.times do |i|
       8.times do |j|
-        @blocks << Block.new(100 + i * 100, 50 + j * 100)  # ブロックを10x8に配置
+        @blocks << Block.new(100 + i * 100, 50 + j * 100)  # ブロックを10x10に配置
       end
     end
     @cannonballs = []
@@ -73,13 +73,25 @@ class Game
     @target_filename = File.basename(target_images.sample, ".*")  # ファイル名を拡張子なしで取得
     @target = Image.load("assets/images/#{@target_filename}.png")  # ターゲット画像を読み込む
 
+    # キーコードと文字の対応をハッシュで定義
+    @key_to_char = {
+      K_A => 'a', K_B => 'b', K_C => 'c', K_D => 'd', K_E => 'e',
+      K_F => 'f', K_G => 'g', K_H => 'h', K_I => 'i', K_J => 'j',
+      K_K => 'k', K_L => 'l', K_M => 'm', K_N => 'n', K_O => 'o',
+      K_P => 'p', K_Q => 'q', K_R => 'r', K_S => 's', K_T => 't',
+      K_U => 'u', K_V => 'v', K_W => 'w', K_X => 'x', K_Y => 'y', K_Z => 'z',
+      K_0 => '0', K_1 => '1', K_2 => '2', K_3 => '3', K_4 => '4',
+      K_5 => '5', K_6 => '6', K_7 => '7', K_8 => '8', K_9 => '9',
+      K_SPACE => ' ', K_COMMA => ',', K_PERIOD => '.', K_MINUS => '-', K_EQUALS => '='
+    }
+
     # ターゲット画像に対応する答えを設定
     @target_answers = {
       "target" => "kame",
-      "target1" => "panda",
+      "target1" => "pannda",
       "target2" => "inu",
       "target3" => "neko",
-      "target5" => "usagi"
+      "target4" => "usagi"
     }
   end
 
@@ -102,7 +114,7 @@ class Game
       @shot_mode = true
     elsif Input.key_push?(K_SPACE) && @shot_mode
       if (last_cannonball = @cannonballs.last)  # 最後に発射された砲弾があるか確認
-        target_x = last_cannonball.x + (last_cannonball.image.width / 2)
+        target_x = last_cannonball.x + (last_cannonball.image.width / 2) 
         target_y = last_cannonball.y
 
         hit_blocks = @blocks.select { |block| hit_block?(block, target_x, target_y) }
@@ -139,7 +151,7 @@ class Game
     Window.draw_font(10, 10, "Score: #{@score}", @font)
     Window.draw_font(10, 40, "Misses: #{@misses}", @font)
     Window.draw(@cannon_x, @cannon_y, @cannon_image)  # 砲台の描画
-    Window.draw_font(100, 50, "Spaceキーでボールを発射", Font.new(40, 'メイリオ'), color: [0, 0, 0])
+    Window.draw_font(100, 50, "spaceキーでボールを発射", Font.new(40, 'メイリオ'), color: [0, 0, 0])
     Window.draw_font(100, 100, "Altキーで答え入力", Font.new(40, 'メイリオ'), color: [0, 0, 0])
 
     # 文字入力モードのときに入力画面を描画
@@ -165,10 +177,10 @@ class Game
   def draw_instructions_screen
     Window.draw(0, 0, @start_background)
     Window.draw_font(100, 100, "Instructions:", @font)
-    Window.draw_font(100, 100, "ゲームの目標: ターゲットの画像を見つけてください", Font.new(40, 'メイリオ', weight: true), color: [0, 0, 0])
+    Window.draw_font(100, 100, "ゲームの目標: ターゲットの画像を当ててください", Font.new(40, 'メイリオ', weight: true), color: [0, 0, 0])
     Window.draw_font(100, 150, "矢印キーで大砲を動かす。", Font.new(40, 'メイリオ'), color: [0, 0, 0])
     Window.draw_font(100, 200, "Space キーでボールを発射する。", Font.new(40, 'メイリオ'), color: [0, 0, 0])
-    Window.draw_font(100, 250, "二回目のSpace キーでボールを積み木に当てる。", Font.new(40, 'メイリオ'), color: [0, 0, 0])
+    Window.draw_font(100, 250, "二回目のSpace キーでボールを積み木にあてる。", Font.new(40, 'メイリオ'), color: [0, 0, 0]) 
     Window.draw_font(100, 300, "Altキーで答えを入力。", Font.new(40, 'メイリオ'), color: [0, 0, 0])
     Window.draw_font(100, 350, "答えを三回間違えたらゲームオーバー。", Font.new(40, 'メイリオ'), color: [0, 0, 0])
   end
@@ -250,7 +262,7 @@ Window.loop do
     # ゲームオーバーまたはクリア時の処理
     if game.game_over || game.game_clear
       Window.draw_font(100, 400, "ゲームオーバー!!", Font.new(50, 'メイリオ'), color: [255, 0, 0]) if game.game_over
-      Window.draw_font(100, 400, "ゲームクリア!!", Font.new(50, 'メイリオ'), color: [0, 255, 0]) if game.game_clear
+      Window.draw_font(100, 400, "ゲームクリア!!", Font.new(50, 'メイリオ'), color: [255, 0, 0]) if game.game_clear
     end
   end
 end
